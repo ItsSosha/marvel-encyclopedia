@@ -6,7 +6,7 @@ import { CharListItem } from '../charListItem/CharListItem';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
-const CharList = () => {
+const CharList = ({onCharClick}) => {
 
     const marvelService = new MarvelService();
 
@@ -18,7 +18,7 @@ const CharList = () => {
         .then(result => {
             setCharacters(result.map(elem => {
                 return (
-                    <CharListItem name={elem.name} thumbnail={elem.thumbnail} />
+                    <CharListItem key={elem.id} name={elem.name} thumbnail={elem.thumbnail} onCharClick={() => onCharClick(elem.id)} />
                 );
             }));
             return result;
@@ -28,6 +28,7 @@ const CharList = () => {
         if (page == 0 && !dir || request) {
             return;
         }
+
         const promise = dir ? updateCharacters(page + 1) : updateCharacters(page - 1);
         setRequest(true);
         promise.then(result => {
@@ -39,13 +40,11 @@ const CharList = () => {
                 setRequest(false);
             }
         );
-
     }
 
-    // useEffect(() => {
-    //     // Run! Like go get some data from an API.
-    //     turnPage(true);
-    //   }, []);
+    useEffect(() => {
+        updateCharacters(page);
+      }, []);
 
 
     return (

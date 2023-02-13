@@ -29,6 +29,9 @@ const RandomChar = () => {
                 setLoading(false);
             })
     }
+
+    
+
     return (
         <div className="randomchar">
             {loading ? <CircularProgress color="success" style={{marginLeft: 25, marginTop: 25}}/> : <View character={character}/>}
@@ -51,9 +54,17 @@ const RandomChar = () => {
 }
 
 const View = ({character}) => {
+
+    let imgStyle;
+    if (character.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
+        imgStyle = {'objectFit': 'contain'}
+    } else {
+        imgStyle = {'objectFit': 'cover'}
+    }
+
     return (
         <div className="randomchar__block">
-            <img src={character.thumbnail} alt={character.name} className="randomchar__img"/>
+            <img src={character.thumbnail} alt={character.name} className="randomchar__img" style={imgStyle}/>
             <div className="randomchar__info">
                 <p className="randomchar__name">{character.name}</p>
                 <p className="randomchar__descr">
