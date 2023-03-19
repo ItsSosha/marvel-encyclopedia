@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import useMarvelService from '../../hooks/useMarvelService';
 import { CircularProgress } from '@mui/material';
+import Error from "../error/error";
 
 const ComicDetails = () => {
 
@@ -11,18 +12,45 @@ const ComicDetails = () => {
     const { id } = useParams();
     const {loading, error, getComicsById, clearError} = useMarvelService(); 
 
+    const onLoadComic = () => {
+        getComicsById(id)
+        .then(onComicLoaded)
+    }
 
-    // const spinner = loading ? <CircularProgress /> : null
+    const onComicLoaded = (comic) => {
+        setComic(comic[0]);
+    }
+
+    useEffect(() => {
+        onLoadComic();
+    }, [])
+
+    const spinner = loading ? <CircularProgress 
+        color='success'
+        style={{display: "block", margin: "20px auto 0", height: "100px", width: "100px"}}/> : null;
+    const errorMessage = error ? <Error /> : null;
+    const content = (!loading && !error) ? <View comic={comic} /> : null;
+    
+    return (
+        <>
+            {spinner}
+            {errorMessage}
+            {content}
+        </>
+    )
+}
+
+const View = ({comic}) => {
+    let imgClass = comic.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg' ? " not-found" : "";
     return (
         <div className="single-comic">
-            {/* {spinner} */}
-            <img src={xMen} alt="x-men" className="single-comic__img"/>
+            <img src={comic.thumbnail} alt="x-men" className={"single-comic__img" + imgClass}/>
             <div className="single-comic__info">
-                <h2 className="single-comic__name">X-Men: Days of Future Past</h2>
-                <p className="single-comic__descr">Re-live the legendary first journey into the dystopian future of 2013 - where Sentinels stalk the Earth, and the X-Men are humanity's only hope...until they die! Also featuring the first appearance of Alpha Flight, the return of the Wendigo, the history of the X-Men from Cyclops himself...and a demon for Christmas!?</p>
-                <p className="single-comic__descr">144 pages</p>
-                <p className="single-comic__descr">Language: en-us</p>
-                <div className="single-comic__price">9.99$</div>
+                <h2 className="single-comic__name">{comic.title}</h2>
+                <p className="single-comic__descr">{comic.description}</p>
+                <p className="single-comic__descr">{comic.pageCount} pages</p>
+                <p className="single-comic__descr">Language: {comic.language}</p>
+                <div className="single-comic__price">{comic.price}</div>
             </div>
             <Link to="/comics" className="single-comic__back">Back to all</Link>
         </div>

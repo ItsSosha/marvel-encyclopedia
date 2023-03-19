@@ -5,6 +5,7 @@ import Skeleton from '../skeleton/Skeleton';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 const CharInfo = ({char}) => {
 
@@ -34,9 +35,11 @@ const CharInfo = ({char}) => {
 
 const View = ({character}) => {
     const comics = character.comics.items.map(elem => {
+        const parts = elem.resourceURI.split('/');
+        const id = parts[parts.length - 1];
         return (
             <li className="char__comics-item">
-                {elem.name}
+                <Link to={`/comics/${id}`}>{elem.name}</Link>
             </li>
         )
     })
