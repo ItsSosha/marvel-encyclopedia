@@ -13,7 +13,6 @@ const CharList = ({onCharClick}) => {
 
     const [characters, setCharacters] = useState([]);
     const [page, setPage] = useState(0);
-    const [request, setRequest] = useState(false)
 
     const updateCharacters = (page) => getAllCharacters(9, page * 9)
         .then(result => {
@@ -26,19 +25,17 @@ const CharList = ({onCharClick}) => {
         })
 
     const turnPage = (dir) => {
-        if (page == 0 && !dir || request) {
+        if (page == 0 && !dir || loading) {
             return;
         }
 
         const promise = dir ? updateCharacters(page + 1) : updateCharacters(page - 1);
-        setRequest(true);
         promise.then(result => {
                 if (dir) {
                     setPage(prevPage => prevPage + 1);
                 } else {
                     setPage(prevPage => prevPage - 1);
                 }
-                setRequest(false);
             }
         );
     }
@@ -47,7 +44,7 @@ const CharList = ({onCharClick}) => {
         updateCharacters(page);
       }, []);
 
-    const loadingSpinner = loading ? <CircularProgress color='success'/> : null
+    const loadingSpinner = loading ? <CircularProgress color='success' style={{display: "block", margin: "20px auto 0"}}/> : null
     return (
         <div className="char__list">
             {loadingSpinner}

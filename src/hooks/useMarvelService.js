@@ -67,7 +67,7 @@ export default function useMarvelService() {
     const {loading, error, request, clearError} = useHttp();
 
 
-    const _transformToObject = (res) => {
+    const _transformToCharacters = (res) => {
         return res.data.results.map(elem => ({
             name: elem.name,
             description: elem.description,
@@ -79,26 +79,44 @@ export default function useMarvelService() {
         }));
     }
 
+    const _transformToComics = (res) => {
+        return res.data.results.map(elem => ({
+            id: elem.id,
+			title: elem.title,
+			description: elem.description || "There is no description",
+			pageCount: elem.pageCount
+				? `${elem.pageCount} p.`
+				: "No information about the number of pages",
+			thumbnail: elem.thumbnail.path + "." + elem.thumbnail.extension,
+			language: elem.textObjects[0]?.language || "en-us",
+			price: elem.prices[0].price
+				? `${elem.prices[0].price}$`
+				: "not available",
+        }));
+    }
+
     const getAllCharacters = async (limit = 0, offset = 0) => {
         const limitParam = limit ? `limit=${limit}&` : '' ;
         const offsetParam = offset ? `offset=${offset}&` : '';
         const characters = await request(`${_apiBase}characters?${limitParam}${offsetParam}apikey=96b616d24953bba69c247e1fd6d704c0`);
-        return _transformToObject(characters);
+        return _transformToCharacters(characters);
     }
 
     const getCharacterById = async id => {
         const character = await request(`${_apiBase}characters/${id}?apikey=96b616d24953bba69c247e1fd6d704c0`)
-        return _transformToObject(character);
+        return _transformToCharacters(character);
     }
 
-    const getAllComics = (limit = 0, offset = 0) => {
+    const getAllComics = async (limit = 0, offset = 0) => {
         const limitParam = limit ? `limit=${limit}&` : '' ;
         const offsetParam = offset ? `offset=${offset}&` : '';
-        return request(`${_apiBase}comics?${limitParam}${offsetParam}apikey=96b616d24953bba69c247e1fd6d704c0`)
+        const comics = await request(`${_apiBase}comics?${limitParam}${offsetParam}apikey=96b616d24953bba69c247e1fd6d704c0`);
+        return _transformToComics(comics);
     }
 
-    const getComicsById = id => {
-        return request(`${_apiBase}comics/${id}?apikey=96b616d24953bba69c247e1fd6d704c0`)
+    const getComicsById = async id => {
+        const comic = await request(`${_apiBase}comics/${id}?apikey=96b616d24953bba69c247e1fd6d704c0`);
+        return _transformToComics(comic);
     }
 
     return {
