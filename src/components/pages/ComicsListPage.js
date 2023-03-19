@@ -1,6 +1,7 @@
 import {useState, useEffect, useRef} from 'react';
 import useMarvelService from '../../hooks/useMarvelService';
 import { CircularProgress } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 import './comicsList.scss';
 
@@ -40,11 +41,11 @@ const ComicsList = () => {
             let imgClass = elem.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg' ? "not-found" : "";
             return (
                 <li className="comics__item" key={i}>
-                    <a href="#">
+                    <Link to={`/comics/${elem.id}`}>
                         <img src={elem.thumbnail} alt={elem.title} className={"comics__item-img " + imgClass}/>
                         <div className="comics__item-name">{elem.title}</div>
                         <div className="comics__item-price">{elem.price}</div>
-                    </a>
+                    </Link>
                 </li>
             )
         })

@@ -1,9 +1,21 @@
-import './singleComic.scss';
+import './comicDetails.scss';
 import xMen from '../../resources/img/x-men.png';
+import { Link, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import useMarvelService from '../../hooks/useMarvelService';
+import { CircularProgress } from '@mui/material';
 
-const SingleComic = () => {
+const ComicDetails = () => {
+
+    const [comic, setComic] = useState(null);
+    const { id } = useParams();
+    const {loading, error, getComicsById, clearError} = useMarvelService(); 
+
+
+    // const spinner = loading ? <CircularProgress /> : null
     return (
         <div className="single-comic">
+            {/* {spinner} */}
             <img src={xMen} alt="x-men" className="single-comic__img"/>
             <div className="single-comic__info">
                 <h2 className="single-comic__name">X-Men: Days of Future Past</h2>
@@ -12,9 +24,9 @@ const SingleComic = () => {
                 <p className="single-comic__descr">Language: en-us</p>
                 <div className="single-comic__price">9.99$</div>
             </div>
-            <a href="#" className="single-comic__back">Back to all</a>
+            <Link to="/comics" className="single-comic__back">Back to all</Link>
         </div>
     )
 }
 
-export default SingleComic;
+export default ComicDetails;
