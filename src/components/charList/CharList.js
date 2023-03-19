@@ -1,20 +1,21 @@
 import './charList.scss';
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import abyss from '../../resources/img/abyss.jpg';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../hooks/useMarvelService';
 import { CharListItem } from '../charListItem/CharListItem';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { CircularProgress } from '@mui/material';
 
 const CharList = ({onCharClick}) => {
 
-    const marvelService = new MarvelService();
+    const {loading, error, getAllCharacters} = useMarvelService();
 
     const [characters, setCharacters] = useState([]);
     const [page, setPage] = useState(0);
     const [request, setRequest] = useState(false)
 
-    const updateCharacters = (page) => marvelService.getAllCharacters(9, page * 9)
+    const updateCharacters = (page) => getAllCharacters(9, page * 9)
         .then(result => {
             setCharacters(result.map(elem => {
                 return (
@@ -46,15 +47,12 @@ const CharList = ({onCharClick}) => {
         updateCharacters(page);
       }, []);
 
-
+    const loadingSpinner = loading ? <CircularProgress color='success'/> : null
     return (
         <div className="char__list">
-            <ul className="char__grid">
-                {characters}
-            </ul>
-            {/* <button className="button button__main button__long">
-                <div className="inner">load more</div>
-            </button> */}
+            {loadingSpinner}
+            {!loading && !error ? <View characters={characters}/> : null}
+
             <div className='d-flex flex-row'>
                 <button className="button button__main button__long"
                     onClick={() => turnPage()}>
@@ -65,6 +63,17 @@ const CharList = ({onCharClick}) => {
                     <div className="inner">Next page</div>
                 </button>
             </div>
+        </div>
+    )
+}
+
+const View = ({characters}) => {
+    return (
+        <div className="char__list">
+
+            <ul className="char__grid">
+                {characters}
+            </ul>
         </div>
     )
 }

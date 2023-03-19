@@ -1,5 +1,5 @@
 import './randomChar.scss';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../hooks/useMarvelService';
 import thor from '../../resources/img/thor.jpeg';
 import mjolnir from '../../resources/img/mjolnir.png';
 import { useState } from 'react';
@@ -8,7 +8,7 @@ import { CircularProgress } from '@mui/material';
 
 const RandomChar = () => {
 
-    const marvelService = new MarvelService();
+    const {loading, error, getCharacterById, clearError} = useMarvelService();
 
     const [character, setCharacter] = useState({
         name: null,
@@ -18,15 +18,15 @@ const RandomChar = () => {
         wiki: null
     });
 
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
 
     const updateChar = () => {
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
-        setLoading(true);
-        marvelService.getCharacterById(id)
+        // setLoading(true);
+        getCharacterById(id)
             .then(result => {
                 setCharacter({...result[0], description: result[0].description ? result[0].description : 'No description provided' });
-                setLoading(false);
+                // setLoading(false);
             })
     }
 
@@ -34,7 +34,8 @@ const RandomChar = () => {
 
     return (
         <div className="randomchar">
-            {loading ? <CircularProgress color="success" style={{marginLeft: 25, marginTop: 25}}/> : <View character={character}/>}
+            {loading ? <CircularProgress color="success" style={{marginLeft: 25, marginTop: 25}}/> 
+            : <View character={character}/>}
             <div className="randomchar__static">
                 <p className="randomchar__title">
                     Random character for today!<br/>

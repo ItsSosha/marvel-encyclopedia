@@ -1,6 +1,6 @@
 import './charInfo.scss';
 import thor from '../../resources/img/thor.jpeg';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../hooks/useMarvelService';
 import Skeleton from '../skeleton/Skeleton';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -8,24 +8,20 @@ import { useRef } from 'react';
 
 const CharInfo = ({char}) => {
 
-    const marvelService = new MarvelService();
+    const {getCharacterById} = useMarvelService();
 
     const [character, setCharacter] = useState(null)
 
-
-    // !!!!!!!
-    const isInitialMount = useRef(true);
-
     useEffect(() => {
-      if (isInitialMount.current) {
-         isInitialMount.current = false;
-      } else {
-        marvelService.getCharacterById(char)
+        if (!char) {
+            return;
+        }
+
+        getCharacterById(char)
         .then(res => {
             setCharacter(res[0]);
         })
-      }
-    });
+    }, [char])
 
     const content = character ? <View character={character}/> : <Skeleton />
 

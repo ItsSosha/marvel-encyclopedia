@@ -5,11 +5,11 @@ import CharInfo from "../charInfo/CharInfo";
 import MarvelService from "../../services/MarvelService";
 import decoration from '../../resources/img/vision.png'; 
 import Skeleton from '../skeleton/Skeleton'
+import AppBanner from "../appBanner/AppBanner";
+import ComicsList from "../comicsList/ComicsList"
 import { useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-const marvelService = new MarvelService();
-
-// marvelService.getAllCharacters().then(result => console.log(result))
 
 const App = () => {
 
@@ -20,17 +20,27 @@ const App = () => {
     }
 
     return (
-        <div className="app">
-            <AppHeader/>
-            <main>
-                <RandomChar/>
-                <div className="char__content">
-                    <CharList onCharClick={onCharSelected} />
-                    <CharInfo char={charId} />
-                </div>
-                <img className="bg-decoration" src={decoration} alt="vision"/>
-            </main>
-        </div>
+        <Router>
+            <div className="app">
+                <AppHeader/>
+                <main>
+                    <Switch>
+                        <Route exact path={"/"}>
+                            <RandomChar/>
+                            <div className="char__content">
+                                <CharList onCharClick={onCharSelected} />
+                                <CharInfo char={charId} />
+                            </div>
+                            <img className="bg-decoration" src={decoration} alt="vision"/>
+                        </Route>
+                        <Route exact path={"/comics"}>
+                            <AppBanner/>
+                            <ComicsList />
+                        </Route>
+                    </Switch>
+                </main>
+            </div>
+        </Router>
     )
 }
 

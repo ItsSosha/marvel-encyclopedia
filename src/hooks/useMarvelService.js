@@ -60,7 +60,7 @@
 
 import { useHttp } from "../hooks/useHttp";
 
-const useMarvelService = () => {
+export default function useMarvelService() {
     
     const _apiBase = 'https://gateway.marvel.com:443/v1/public/';    
 
@@ -82,23 +82,23 @@ const useMarvelService = () => {
     const getAllCharacters = async (limit = 0, offset = 0) => {
         const limitParam = limit ? `limit=${limit}&` : '' ;
         const offsetParam = offset ? `offset=${offset}&` : '';
-        const characters = await request(`${this._apiBase}characters?${limitParam}${offsetParam}apikey=96b616d24953bba69c247e1fd6d704c0`);
-        return this._transformToObject(characters);
+        const characters = await request(`${_apiBase}characters?${limitParam}${offsetParam}apikey=96b616d24953bba69c247e1fd6d704c0`);
+        return _transformToObject(characters);
     }
 
     const getCharacterById = async id => {
-        const character = await request(`${this._apiBase}characters/${id}?apikey=96b616d24953bba69c247e1fd6d704c0`)
-        return this._transformToObject(character);
+        const character = await request(`${_apiBase}characters/${id}?apikey=96b616d24953bba69c247e1fd6d704c0`)
+        return _transformToObject(character);
     }
 
     const getAllComics = (limit = 0, offset = 0) => {
         const limitParam = limit ? `limit=${limit}&` : '' ;
         const offsetParam = offset ? `offset=${offset}&` : '';
-        return request(`${this._apiBase}comics?${limitParam}${offsetParam}apikey=96b616d24953bba69c247e1fd6d704c0`)
+        return request(`${_apiBase}comics?${limitParam}${offsetParam}apikey=96b616d24953bba69c247e1fd6d704c0`)
     }
 
     const getComicsById = id => {
-        return request(`${this._apiBase}comics/${id}?apikey=96b616d24953bba69c247e1fd6d704c0`)
+        return request(`${_apiBase}comics/${id}?apikey=96b616d24953bba69c247e1fd6d704c0`)
     }
 
     return {
@@ -110,5 +110,3 @@ const useMarvelService = () => {
         getAllComics, 
         getComicsById}
 }
-
-export {useMarvelService}
