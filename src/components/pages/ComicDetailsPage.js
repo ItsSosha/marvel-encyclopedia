@@ -1,5 +1,4 @@
 import './comicDetails.scss';
-import xMen from '../../resources/img/x-men.png';
 import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import useMarvelService from '../../hooks/useMarvelService';

@@ -11,6 +11,7 @@ const App = () => {
                 <main>
                     <Routes>
                         <Route path={"/"} element={<MainPage />} />
+                        <Route path={"/characters/:page"} element={<MainPage />} />
                         <Route path={"/comics"} element={<ComicsPage />}>
                             <Route index element={<ComicsList />}/>
                             <Route path=":id" element={<ComicDetails />}/>

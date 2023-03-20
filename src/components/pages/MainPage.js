@@ -1,7 +1,7 @@
 import { useState } from "react";
 import RandomChar from "../randomChar/RandomChar";
 import CharInfo from "../charInfo/CharInfo";
-import CharList from "../charList/CharList";
+import CharListPage from "./CharListPage";
 import decoration from "../../resources/img/vision.png"
 
 export default function MainPage() {
@@ -15,7 +15,7 @@ export default function MainPage() {
         <>
             <RandomChar/>
             <div className="char__content">
-                <CharList onCharClick={onCharSelected} />
+                <CharListPage onCharClick={onCharSelected} />
                 <CharInfo char={charId} />
             </div>
             <img className="bg-decoration" src={decoration} alt="vision"/>
