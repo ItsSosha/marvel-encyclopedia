@@ -1,7 +1,7 @@
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect} from 'react';
 import useMarvelService from '../../hooks/useMarvelService';
 import { CircularProgress } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate, createSearchParams } from 'react-router-dom';
 import Error from "../error/error";
 
 import './comicsList.scss';
@@ -12,15 +12,35 @@ const ComicsList = () => {
     const [offset, setOffset] = useState(0);
     const [comicsEnded, setComicsEnded] = useState(false);
     const [request, setRequest] = useState(false);
+    
+    const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const {loading, error, getAllComics} = useMarvelService();
 
     useEffect(() => {
-        onLoadComics();
+        onInitialLoad();
     }, [])
+
+    const onInitialLoad = () => {
+        setRequest(true);
+        if (!searchParams.get("loadMore")) {
+            setSearchParams({loadMore: 0});
+            getAllComics(8)
+            .then(onComicsListLoaded)
+        } else {
+            const load = +searchParams.get("loadMore");
+            getAllComics(load + 8)
+            .then(onComicsListLoaded)
+        }
+    }
 
     const onLoadComics = () => {
         setRequest(true);
+        console.log(searchParams.get("loadMore"));
+        setSearchParams(prevParams => ({
+            loadMore: +prevParams.get("loadMore") + 8
+        }))
         getAllComics(8, offset)
             .then(onComicsListLoaded)
     }
