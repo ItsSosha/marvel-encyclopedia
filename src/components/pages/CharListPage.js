@@ -13,7 +13,6 @@ const CharListPage = ({onCharClick}) => {
     const [characters, setCharacters] = useState([]);
     const {page} = useParams();
     const navigate = useNavigate();
-    console.log(page);
     const updateCharacters = (page) => getAllCharacters(9, (page - 1) * 9)
         .then(result => {
             setCharacters(result.map(elem => {

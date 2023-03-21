@@ -21,6 +21,10 @@
         line-height: 18px;
         padding: 0 18px;
         transition: none;
+        &::before, &::after {
+            width: 10px;
+            height: 10px;
+        }
         &::before {
             border-color: $main-color transparent;
             border-style: solid;

@@ -2,6 +2,7 @@ import {useState, useEffect, useRef} from 'react';
 import useMarvelService from '../../hooks/useMarvelService';
 import { CircularProgress } from '@mui/material';
 import { Link } from 'react-router-dom';
+import Error from "../error/error";
 
 import './comicsList.scss';
 
@@ -40,7 +41,7 @@ const ComicsList = () => {
         const items = arr.map((elem, i) => {
             let imgClass = elem.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg' ? "not-found" : "";
             return (
-                <li className="comics__item" key={elem.id}>
+                <li className="comics__item" key={i}>
                     <Link to={`/comics/${elem.id}`}>
                         <img src={elem.thumbnail} alt={elem.title} className={"comics__item-img " + imgClass}/>
                         <div className="comics__item-name">{elem.title}</div>
@@ -60,10 +61,12 @@ const ComicsList = () => {
     const items = renderItems(comicsList);
 
     const spinner = loading ? <CircularProgress color="success" style={{display: "block", margin: "20px auto 0"}}/> : null;
+    const errorMessage = error ? <Error /> : null;
     return (
         <div className="comics__list">
             {items}
             {spinner}
+            {errorMessage}
             <button 
                 disabled={comicsEnded || request} 
                 style={{'display' : comicsEnded ? 'none' : 'block'}}
