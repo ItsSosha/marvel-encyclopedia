@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/react-gh-pages/static/css/main.a86e5a72.css",
-    "main.js": "/react-gh-pages/static/js/main.3e4e97ff.js",
-    "static/media/vision.png": "/react-gh-pages/static/media/vision.067d4ae1936d64a577ce.png",
-    "static/media/thor.jpeg": "/react-gh-pages/static/media/thor.533e3a5e127689ab0b1f.jpeg",
-    "static/media/mjolnir.png": "/react-gh-pages/static/media/mjolnir.61f31e1809f12183a524.png",
-    "static/media/Avengers.png": "/react-gh-pages/static/media/Avengers.4065c8f9c94e3d8b039a.png",
-    "static/media/error.gif": "/react-gh-pages/static/media/error.42292aa12b6bc303ce99.gif",
-    "static/media/Avengers_logo.png": "/react-gh-pages/static/media/Avengers_logo.9eaf219344d83362e830.png",
-    "index.html": "/react-gh-pages/index.html",
-    "main.a86e5a72.css.map": "/react-gh-pages/static/css/main.a86e5a72.css.map",
-    "main.3e4e97ff.js.map": "/react-gh-pages/static/js/main.3e4e97ff.js.map"
+    "main.css": "/marvel-encyclopedia/static/css/main.a86e5a72.css",
+    "main.js": "/marvel-encyclopedia/static/js/main.af234794.js",
+    "static/media/vision.png": "/marvel-encyclopedia/static/media/vision.067d4ae1936d64a577ce.png",
+    "static/media/thor.jpeg": "/marvel-encyclopedia/static/media/thor.533e3a5e127689ab0b1f.jpeg",
+    "static/media/mjolnir.png": "/marvel-encyclopedia/static/media/mjolnir.61f31e1809f12183a524.png",
+    "static/media/Avengers.png": "/marvel-encyclopedia/static/media/Avengers.4065c8f9c94e3d8b039a.png",
+    "static/media/error.gif": "/marvel-encyclopedia/static/media/error.42292aa12b6bc303ce99.gif",
+    "static/media/Avengers_logo.png": "/marvel-encyclopedia/static/media/Avengers_logo.9eaf219344d83362e830.png",
+    "index.html": "/marvel-encyclopedia/index.html",
+    "main.a86e5a72.css.map": "/marvel-encyclopedia/static/css/main.a86e5a72.css.map",
+    "main.af234794.js.map": "/marvel-encyclopedia/static/js/main.af234794.js.map"
   },
   "entrypoints": [
     "static/css/main.a86e5a72.css",
-    "static/js/main.3e4e97ff.js"
+    "static/js/main.af234794.js"
   ]
 }
