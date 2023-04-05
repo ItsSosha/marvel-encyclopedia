@@ -10,15 +10,7 @@ const RandomChar = () => {
 
     const {loading, error, getCharacterById, clearError} = useMarvelService();
 
-    const [character, setCharacter] = useState({
-        name: null,
-        description: null,
-        thumbnail: null,
-        homepage: null,
-        wiki: null
-    });
-
-    // const [loading, setLoading] = useState(true);
+    const [character, setCharacter] = useState(null);
 
     const updateChar = () => {
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
@@ -26,15 +18,12 @@ const RandomChar = () => {
         getCharacterById(id)
             .then(result => {
                 setCharacter({...result[0], description: result[0].description ? result[0].description : 'No description provided' });
-                // setLoading(false);
             })
     }
 
-    
-
     return (
         <div className="randomchar">
-            {loading ? <CircularProgress color="success" style={{marginLeft: 25, marginTop: 25}}/> 
+            {loading || !character ? <CircularProgress color="success" style={{marginLeft: 25, marginTop: 25}}/> 
             : <View character={character}/>}
             <div className="randomchar__static">
                 <p className="randomchar__title">

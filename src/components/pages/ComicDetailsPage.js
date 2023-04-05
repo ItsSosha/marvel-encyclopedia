@@ -24,11 +24,11 @@ const ComicDetails = () => {
         onLoadComic();
     }, [])
 
-    const spinner = loading ? <CircularProgress 
+    const spinner = loading || !comic ? <CircularProgress 
         color='success'
         style={{display: "block", margin: "20px auto 0", height: "100px", width: "100px"}}/> : null;
     const errorMessage = error ? <Error /> : null;
-    const content = (!loading && !error) ? <View comic={comic} /> : null;
+    const content = !loading && !error && comic ? <View comic={comic} /> : null;
     
     return (
         <>

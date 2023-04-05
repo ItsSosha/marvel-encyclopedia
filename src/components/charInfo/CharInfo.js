@@ -4,12 +4,13 @@ import useMarvelService from '../../hooks/useMarvelService';
 import Skeleton from '../skeleton/Skeleton';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { useRef } from 'react';
+import Error from '../error/error';
+import { CircularProgress } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 const CharInfo = ({char}) => {
 
-    const {getCharacterById} = useMarvelService();
+    const {loading, error, getCharacterById} = useMarvelService();
 
     const [character, setCharacter] = useState(null)
 
@@ -17,17 +18,22 @@ const CharInfo = ({char}) => {
         if (!char) {
             return;
         }
-
         getCharacterById(char)
         .then(res => {
             setCharacter(res[0]);
         })
     }, [char])
 
-    const content = character ? <View character={character}/> : <Skeleton />
+    const skeleton = !loading && !error && !character ? <Skeleton /> : null; 
+    const content = !loading && !error && character ? <View character={character}/> : null;
+    const loadingContent = char && loading ? <CircularProgress color='success' style={{display: "block", margin: "20px auto 0"}}/> : null;
+    const errorContent = char && error ? <Error /> : null;
 
     return (
         <div className="char__info">
+            {skeleton}
+            {errorContent}
+            {loadingContent}
             {content}
         </div>
     )
