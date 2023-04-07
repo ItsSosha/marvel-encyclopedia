@@ -1,5 +1,4 @@
 import './charInfo.scss';
-import thor from '../../resources/img/thor.jpeg';
 import useMarvelService from '../../hooks/useMarvelService';
 import Skeleton from '../skeleton/Skeleton';
 import { useState } from 'react';
@@ -10,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 const CharInfo = ({char}) => {
 
-    const {loading, error, getCharacterById} = useMarvelService();
+    const {getCharacterById, process, setProcess, clearError} = useMarvelService();
 
     const [character, setCharacter] = useState(null)
 
@@ -18,23 +17,34 @@ const CharInfo = ({char}) => {
         if (!char) {
             return;
         }
+        clearError();
         getCharacterById(char)
         .then(res => {
             setCharacter(res[0]);
         })
+        .then(() => {
+            setProcess('success')
+        })
     }, [char])
 
-    const skeleton = !loading && !error && !character ? <Skeleton /> : null; 
-    const content = !loading && !error && character ? <View character={character}/> : null;
-    const loadingContent = char && loading ? <CircularProgress color='success' style={{display: "block", margin: "20px auto 0"}}/> : null;
-    const errorContent = char && error ? <Error /> : null;
+    const setContent = (process, character) => {
+        switch (process) {
+            case 'waiting':
+                return <Skeleton />;
+            case 'loading':
+                return <CircularProgress color='success' style={{display: "block", margin: "20px auto 0"}}/>;
+            case 'success':
+                return <View character={character} />;
+            case 'failure':
+                return <Error />;
+            default:
+                throw new Error('Unknown process!');
+        }
+    }
 
     return (
         <div className="char__info">
-            {skeleton}
-            {errorContent}
-            {loadingContent}
-            {content}
+            {setContent(process, character)}
         </div>
     )
 }

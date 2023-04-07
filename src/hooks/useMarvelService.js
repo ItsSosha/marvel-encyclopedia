@@ -4,7 +4,7 @@ export default function useMarvelService() {
     
     const _apiBase = 'https://gateway.marvel.com:443/v1/public/';    
 
-    const {loading, error, request, clearError} = useHttp();
+    const {loading, error, request, clearError, process, setProcess} = useHttp();
 
 
     const _transformToCharacters = (res) => {
@@ -61,10 +61,13 @@ export default function useMarvelService() {
 
     return {
         loading, 
-        error, 
+        error,
+        process, 
+        setProcess,
         clearError, 
         getAllCharacters, 
         getCharacterById, 
         getAllComics, 
-        getComicsById}
+        getComicsById
+    }
 }

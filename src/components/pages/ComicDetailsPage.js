@@ -1,19 +1,19 @@
 import './comicDetails.scss';
 import { Link, useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import useMarvelService from '../../hooks/useMarvelService';
-import { CircularProgress } from '@mui/material';
-import Error from "../error/error";
+import { setContent } from '../../utils';
 
 const ComicDetails = () => {
 
     const [comic, setComic] = useState(null);
     const { id } = useParams();
-    const {loading, error, getComicsById, clearError} = useMarvelService(); 
+    const {getComicsById, clearError, process, setProcess} = useMarvelService(); 
 
     const onLoadComic = () => {
         getComicsById(id)
         .then(onComicLoaded)
+        .then(() => setProcess('success'))
     }
 
     const onComicLoaded = (comic) => {
@@ -24,32 +24,28 @@ const ComicDetails = () => {
         onLoadComic();
     }, [])
 
-    const spinner = loading || !comic ? <CircularProgress 
-        color='success'
-        style={{display: "block", margin: "20px auto 0", height: "100px", width: "100px"}}/> : null;
-    const errorMessage = error ? <Error /> : null;
-    const content = !loading && !error && comic ? <View comic={comic} /> : null;
+    const items = useMemo(() => {
+        return setContent(process, View, comic, false);
+    })
     
     return (
         <>
-            {spinner}
-            {errorMessage}
-            {content}
+            {items}
         </>
     )
 }
 
-const View = ({comic}) => {
-    let imgClass = comic.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg' ? " not-found" : "";
+const View = ({data}) => {
+    let imgClass = data.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg' ? " not-found" : "";
     return (
         <div className="single-comic">
-            <img src={comic.thumbnail} alt="x-men" className={"single-comic__img" + imgClass}/>
+            <img src={data.thumbnail} alt="x-men" className={"single-comic__img" + imgClass}/>
             <div className="single-comic__info">
-                <h2 className="single-comic__name">{comic.title}</h2>
-                <p className="single-comic__descr">{comic.description}</p>
-                <p className="single-comic__descr">{comic.pageCount} pages</p>
-                <p className="single-comic__descr">Language: {comic.language}</p>
-                <div className="single-comic__price">{comic.price}</div>
+                <h2 className="single-comic__name">{data.title}</h2>
+                <p className="single-comic__descr">{data.description}</p>
+                <p className="single-comic__descr">{data.pageCount} pages</p>
+                <p className="single-comic__descr">Language: {data.language}</p>
+                <div className="single-comic__price">{data.price}</div>
             </div>
             <Link to="/comics" className="single-comic__back">Back to all</Link>
         </div>

@@ -1,22 +1,20 @@
+import ComicsListItem from '../comicsListItem/comicsListItem';
 import {useState, useEffect} from 'react';
 import useMarvelService from '../../hooks/useMarvelService';
-import { CircularProgress } from '@mui/material';
-import { Link, useSearchParams, useNavigate, createSearchParams } from 'react-router-dom';
-import Error from "../error/error";
-
+import { useSearchParams } from 'react-router-dom';
+import { setLoadingContent } from '../../utils';
 import './comicsList.scss';
 
-const ComicsList = () => {
+const ComicsListPage = () => {
 
     const [comicsList, setComicsList] = useState([]);
     const [offset, setOffset] = useState(0);
     const [comicsEnded, setComicsEnded] = useState(false);
     const [request, setRequest] = useState(false);
     
-    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const {loading, error, getAllComics} = useMarvelService();
+    const {getAllComics, process, setProcess} = useMarvelService();
 
     useEffect(() => {
         onInitialLoad();
@@ -28,21 +26,23 @@ const ComicsList = () => {
             setSearchParams({loadMore: 0});
             getAllComics(8)
             .then(onComicsListLoaded)
+            .then(() => setProcess('success'))
         } else {
             const load = +searchParams.get("loadMore");
             getAllComics(load + 8)
             .then(onComicsListLoaded)
+            .then(() => setProcess('success'))
         }
     }
 
     const onLoadComics = () => {
         setRequest(true);
-        console.log(searchParams.get("loadMore"));
         setSearchParams(prevParams => ({
             loadMore: +prevParams.get("loadMore") + 8
         }))
         getAllComics(8, offset)
             .then(onComicsListLoaded)
+            .then(() => setProcess('success'))
     }
 
     const onComicsListLoaded = (newComicsList) => {
@@ -59,15 +59,8 @@ const ComicsList = () => {
 
     function renderItems (arr) {
         const items = arr.map((elem, i) => {
-            let imgClass = elem.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg' ? "not-found" : "";
             return (
-                <li className="comics__item" key={i}>
-                    <Link to={`/comics/${elem.id}`}>
-                        <img src={elem.thumbnail} alt={elem.title} className={"comics__item-img " + imgClass}/>
-                        <div className="comics__item-name">{elem.title}</div>
-                        <div className="comics__item-price">{elem.price}</div>
-                    </Link>
-                </li>
+                <ComicsListItem item={elem} key={i}/>
             )
         })
 
@@ -78,15 +71,10 @@ const ComicsList = () => {
         )
     }
 
-    const items = renderItems(comicsList);
 
-    const spinner = loading ? <CircularProgress color="success" style={{display: "block", margin: "20px auto 0"}}/> : null;
-    const errorMessage = error ? <Error /> : null;
     return (
         <div className="comics__list">
-            {items}
-            {spinner}
-            {errorMessage}
+            {setLoadingContent(process, () => renderItems(comicsList), null, false)}
             <button 
                 disabled={comicsEnded || request} 
                 style={{'display' : comicsEnded ? 'none' : 'block'}}
@@ -98,4 +86,5 @@ const ComicsList = () => {
     )
 }
 
-export default ComicsList;
+export default ComicsListPage;
+

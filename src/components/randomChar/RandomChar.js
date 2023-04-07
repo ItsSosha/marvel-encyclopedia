@@ -1,30 +1,31 @@
 import './randomChar.scss';
 import useMarvelService from '../../hooks/useMarvelService';
-import thor from '../../resources/img/thor.jpeg';
 import mjolnir from '../../resources/img/mjolnir.png';
 import { useState } from 'react';
-import Spinner from 'react-bootstrap/Spinner';
-import { CircularProgress } from '@mui/material';
+import setContent from '../../utils/setContent';
 
 const RandomChar = () => {
 
-    const {loading, error, getCharacterById, clearError} = useMarvelService();
+    const {getCharacterById, clearError, process, setProcess} = useMarvelService();
 
     const [character, setCharacter] = useState(null);
 
     const updateChar = () => {
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
-        // setLoading(true);
+
+        clearError();
+
         getCharacterById(id)
             .then(result => {
                 setCharacter({...result[0], description: result[0].description ? result[0].description : 'No description provided' });
             })
+            .then(() => setProcess('success'));
     }
+
 
     return (
         <div className="randomchar">
-            {loading || !character ? <CircularProgress color="success" style={{marginLeft: 25, marginTop: 25}}/> 
-            : <View character={character}/>}
+            {setContent(process, View, character, false)}
             <div className="randomchar__static">
                 <p className="randomchar__title">
                     Random character for today!<br/>
@@ -43,10 +44,10 @@ const RandomChar = () => {
     )    
 }
 
-const View = ({character}) => {
+const View =({data}) => {
 
     let imgStyle;
-    if (character.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
+    if (data.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
         imgStyle = {'objectFit': 'contain'}
     } else {
         imgStyle = {'objectFit': 'cover'}
@@ -54,17 +55,17 @@ const View = ({character}) => {
 
     return (
         <div className="randomchar__block">
-            <img src={character.thumbnail} alt={character.name} className="randomchar__img" style={imgStyle}/>
+            <img src={data.thumbnail} alt={data.name} className="randomchar__img" style={imgStyle}/>
             <div className="randomchar__info">
-                <p className="randomchar__name">{character.name}</p>
+                <p className="randomchar__name">{data.name}</p>
                 <p className="randomchar__descr">
-                    {character.description}
+                    {data.description}
                 </p>
                 <div className="randomchar__btns">
-                    <a href={character.homepage} className="button button__main">
+                    <a href={data.homepage} className="button button__main">
                         <div className="inner">homepage</div>
                     </a>
-                    <a href={character.wiki} className="button button__secondary">
+                    <a href={data.wiki} className="button button__secondary">
                         <div className="inner">Wiki</div>
                     </a>
                 </div>
